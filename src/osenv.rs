@@ -1,13 +1,6 @@
 use std::env;
 use std::env::VarError;
-
-pub fn update_account(
-    name: &String,
-    username: Option<&String>,
-    password: Option<&String>,
-) -> Result<String, VarError> {
-    todo!();
-}
+use winreg::{enums::*, RegKey};
 
 pub fn insert_account(name: &String, username: &String, password: &String) {
     let mut value = String::new();
@@ -16,18 +9,21 @@ pub fn insert_account(name: &String, username: &String, password: &String) {
     value.push_str(password);
     let mut ac_name = "passman_".to_string();
     ac_name.push_str(name);
-    // dbg!(&ac_name, &value);
 
-    // let hkcu = RegKey::predef(HKEY_CURRENT_USER);
-    // let (env, _) = hkcu.create_subkey("Environment").unwrap(); // create_subkey opens with write permissions
-    // env.set_value("TestVar", &"TestValue").unwrap();
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let (env, _) = hkcu.create_subkey("Environment").unwrap(); // create_subkey opens with write permissions
+    env.set_value(ac_name, &value).unwrap();
 
-    // env.set_value(ac_name, &value).unwrap();
-
-    env::set_var(ac_name, value)
+    // env::set_var(ac_name, value)
 }
-pub fn delete_account() {
-    todo!();
+pub fn delete_account(name: &String) {
+    let mut value = String::new();
+    value.push_str("passman_");
+    value.push_str(name);
+
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let (env, _) = hkcu.create_subkey("Environment").unwrap(); // create_subkey opens with write permissions
+    env.delete_value(value).unwrap();
 }
 
 pub fn get_all() -> Vec<(String, String)> {

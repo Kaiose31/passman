@@ -46,9 +46,13 @@ fn main() {
 
     if let Some(account) = args.name {
         if let Some(username) = args.username {
-            if let Some(password) = args.password {
-                osenv::insert_account(&account, &username, &password);
-                println!("Successfully Inserted Details for {}", account);
+            if username == "delete" {
+                osenv::delete_account(&account);
+            } else {
+                if let Some(password) = args.password {
+                    osenv::insert_account(&account, &username, &password);
+                    println!("Successfully Inserted Details for {}", account);
+                }
             }
         }
     }
