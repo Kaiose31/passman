@@ -22,10 +22,13 @@ fn get_details(value: String) -> HashMap<String, String> {
 fn main() {
     let args = Command::parse();
     if let None = args.name {
+        println!("Account Details\n****************\n");
         for (key, data) in osenv::get_all() {
             let detail = get_details(data);
-            println!("Account Details\n****************\nName: {}\nUsername: {}\nPassword: {}\n****************",
-            key,detail["username"],detail["password"])
+            println!(
+                "Name: {}\nUsername: {}\nPassword: {}\n****************",
+                key, detail["username"], detail["password"]
+            );
         }
     }
 
